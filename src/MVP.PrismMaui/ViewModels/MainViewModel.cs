@@ -1,4 +1,5 @@
 ﻿using MVP.PrismMaui.Infrastructure.Abstractions;
+using MVP.PrismMaui.Infrastructure.Mappers;
 
 namespace MVP.PrismMaui.ViewModels
 {
@@ -10,7 +11,14 @@ namespace MVP.PrismMaui.ViewModels
         {
             _locationServices = locationServices;
 
-            var p = _locationServices.GetLocations(40.7, -74);
+            LoadData();
+        }
+
+        private async Task LoadData()
+        {
+            var response = await _locationServices.GetLocations(40.7, -74);
+
+            var results = BackendToModelMapper.GetResults(response.Results);
         }
     }
 }
