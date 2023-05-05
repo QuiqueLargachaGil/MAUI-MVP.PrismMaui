@@ -6,6 +6,7 @@ namespace MVP.PrismMaui.Infrastructure.Services.Locations
     public class LocationServices : ILocationServices
     {
         private const string SearchUbicationsEndpoint = "https://api.foursquare.com/v3/places/search?ll={0},{1}";
+
         public async Task<LocationsResponse> GetLocations(double latitude, double longitude)
         {
             LocationsResponse result = new LocationsResponse();
@@ -26,5 +27,7 @@ namespace MVP.PrismMaui.Infrastructure.Services.Locations
 
             return result;
         }
+
+        //TODO: Implementar el nuevo método que define la interfaz para desarrollar el servicio que hace la llamada GET y obtener las fotos
     }
 }

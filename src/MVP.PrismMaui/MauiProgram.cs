@@ -21,7 +21,8 @@ public static class MauiProgram
 				prism.RegisterTypes(types =>
 				{
 					types.RegisterForNavigation<MainView, MainViewModel>();
-				})
+                    types.RegisterForNavigation<ResultDetailsView, ResultDetailsViewModel>();
+                })
 				.ConfigureServices(services =>
 				{
 					services.AddSingleton<ILocationServices, LocationServices>();
