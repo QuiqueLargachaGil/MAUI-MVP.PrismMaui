@@ -4,10 +4,51 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="MVP.PrismMaui.Views.HeroesView"
     Title="HeroesView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid
+        RowDefinitions="auto, *"
+        Margin="20">
+        <SearchBar
+            Grid.Row="0">
+            
+        </SearchBar>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            Margin="0,20,0,0">
+            <CollectionView
+                ItemsSource="{Binding Heroes}"
+                SelectionChangedCommand="{Binding NavigateToHeroDetailsCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            RowDefinitions="auto, auto"
+                            ColumnDefinitions="auto, *">
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Aspect="AspectFill"
+                                HeightRequest="100"
+                                WidthRequest="100"
+                                Source="{Binding Photo}" />
+                            <StackLayout
+                                Grid.Row="0"
+                                Grid.Column="1">
+                                <Label
+                                    Text="{Binding Name}" />
+                                <Label
+                                    Text="{Binding Name}" />
+                            </StackLayout>
+                            <Line/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
 </ContentPage>

@@ -12,6 +12,8 @@
 
         public Thumbnail Thumbnail { get; set; }
 
+        public ImageSource Photo { get; set; }
+
         public string ResourceUri { get; set; }
 
         public ProtagonistOf Comics { get; set; }
