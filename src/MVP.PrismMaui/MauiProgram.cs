@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using MVP.PrismMaui.Infrastructure.Abstractions;
+using MVP.PrismMaui.Infrastructure.Services.Heroes;
+using MVP.PrismMaui.Services;
+using MVP.PrismMaui.Services.Abstractions;
 using MVP.PrismMaui.ViewModels;
 using MVP.PrismMaui.Views;
 
@@ -19,7 +23,8 @@ public static class MauiProgram
                 })
                 .ConfigureServices(services =>
                 {
-                    //services.AddSingleton<>();
+                    services.AddSingleton<ICheckConnectivityService, CheckConnectivityService>();
+                    services.AddSingleton<IHeroesService, HeroesService>();
                 })
                 .OnAppStart(async (start) =>
                 {
