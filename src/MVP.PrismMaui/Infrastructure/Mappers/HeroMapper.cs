@@ -15,9 +15,12 @@ namespace MVP.PrismMaui.Infrastructure.Mappers
                 Description = source.Description,
                 Modified = source.Modified,
                 Thumbnail = GetThumbnail(source.Thumbnail),
+                Photo = GetPhoto(source.Thumbnail),
                 ResourceUri = source.ResourceUri,
                 Comics = GetComics(source.Comics),
-                Series = GetSeries(source.Series)
+                NumberOfComics = source.Comics.Items.Count(),
+                Series = GetSeries(source.Series),
+                NumberOfSeries = source.Series.Items.Count(),
             };
 
             return hero;
@@ -32,6 +35,22 @@ namespace MVP.PrismMaui.Infrastructure.Mappers
             };
 
             return thumbnail;
+        }
+
+        private static ImageSource GetPhoto(ThumbnailDto thumbnailDto)
+        {
+            var imageUrl = $"{thumbnailDto.Path}.{thumbnailDto.Extension}";
+            var photoSource = ImageSource.FromUri(new Uri(imageUrl));
+
+            // Other method
+            /*var photoSource = new UriImageSource
+            {
+                Uri = new Uri(imageUrl),
+                CachingEnabled = true,
+                CacheValidity = TimeSpan.FromDays(1)
+            };*/
+
+            return photoSource;
         }
 
         private static ProtagonistOf GetComics(ComicDto comicDto)

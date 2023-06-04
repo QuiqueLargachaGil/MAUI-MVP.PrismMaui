@@ -20,6 +20,7 @@ public static class MauiProgram
                 prism.RegisterTypes(types =>
                 {
                     types.RegisterForNavigation<HeroesView, HeroesViewModel>();
+                    types.RegisterForNavigation<HeroDetailsView, HeroDetailsViewModel>();
                 })
                 .ConfigureServices(services =>
                 {

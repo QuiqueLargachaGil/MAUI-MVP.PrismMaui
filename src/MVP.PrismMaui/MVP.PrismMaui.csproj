@@ -55,6 +55,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\HeroDetailsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\HeroesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

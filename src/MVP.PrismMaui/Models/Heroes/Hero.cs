@@ -12,10 +12,16 @@
 
         public Thumbnail Thumbnail { get; set; }
 
+        public ImageSource Photo { get; set; }
+
         public string ResourceUri { get; set; }
 
         public ProtagonistOf Comics { get; set; }
 
+        public int NumberOfComics { get; set; }
+
         public ProtagonistOf Series { get; set; }
+
+        public int NumberOfSeries { get; set;}
     }
 }
