@@ -18,7 +18,9 @@ namespace MVP.PrismMaui.Infrastructure.Mappers
                 Photo = GetPhoto(source.Thumbnail),
                 ResourceUri = source.ResourceUri,
                 Comics = GetComics(source.Comics),
-                Series = GetSeries(source.Series)
+                NumberOfComics = source.Comics.Items.Count(),
+                Series = GetSeries(source.Series),
+                NumberOfSeries = source.Series.Items.Count(),
             };
 
             return hero;

@@ -3,16 +3,22 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="MVP.PrismMaui.Views.HeroesView"
-    Title="HeroesView">
+    Title="HeroesView"
+    xmlns:prism="http://prismlibrary.com">
 
     <Grid
         RowDefinitions="auto, *"
         Margin="20">
         <SearchBar
+            x:Name="searchBar"
             Grid.Row="0">
-            
+            <SearchBar.Behaviors>
+                <prism:EventToCommandBehavior
+                    EventName="TextChanged"
+                    Command="{Binding SearchHeroCommand}"
+                    CommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+            </SearchBar.Behaviors>
         </SearchBar>
-
         <RefreshView
             Grid.Row="1"
             Command="{Binding RefreshCommand}"
@@ -42,9 +48,10 @@
                                 <Label
                                     Text="{Binding Name}" />
                                 <Label
-                                    Text="{Binding Name}" />
+                                    Text="{Binding NumberOfComics}" />
+                                <Label
+                                    Text="{Binding NumberOfSeries}" />
                             </StackLayout>
-                            <Line/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

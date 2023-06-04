@@ -13,6 +13,7 @@ namespace MVP.PrismMaui.ViewModels
         private readonly IHeroesService _heroesService;
 
         private ObservableCollection<Hero> _heroes;
+        private IEnumerable<Hero> _heroesList;
         private bool _isRefreshing;
 
         public HeroesViewModel(INavigationService navigationService, IHeroesService heroesService)
@@ -20,12 +21,14 @@ namespace MVP.PrismMaui.ViewModels
             _navigationService = navigationService;
             _heroesService = heroesService;
 
+            SearchHeroCommand = new Command<string>((textToSearch) => SearchHero(textToSearch));
             RefreshCommand = new Command(async () => await Refresh());
             NavigateToHeroDetailsCommand = new Command<Hero>(async (selectedHero) => await NavigateToHeroDetails(selectedHero));
             
             LoadData();
         }
 
+        public ICommand SearchHeroCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand NavigateToHeroDetailsCommand { get; }
 
@@ -47,14 +50,28 @@ namespace MVP.PrismMaui.ViewModels
             {
                 var request = new HeroesRequest("https://gateway.marvel.com:443");
                 var response = await _heroesService.GetHeroes(request);
-                var heroes = BackendToModelMapper.GetHeroes(response);
+                _heroesList = BackendToModelMapper.GetHeroes(response);
 
-                Heroes = new ObservableCollection<Hero>(heroes);
+                Heroes = new ObservableCollection<Hero>(_heroesList);
             }
             catch (Exception exception)
             {
                 //HandleException(exception);
                 await Application.Current.MainPage.DisplayAlert("MarvelApp", exception.Message, "Ok");
+            }
+        }
+
+        // TODO find better method to search and display the search results
+        private void SearchHero(string textToSearch)
+        {
+            if (string.IsNullOrEmpty(textToSearch))
+            {
+                Heroes = new ObservableCollection<Hero>(_heroesList);
+            }
+            else
+            {
+                var filteredHeroes = _heroesList.Where(x => x.Name.ToLower().Contains(textToSearch.ToLower())).ToList();
+                Heroes = new ObservableCollection<Hero>(filteredHeroes);
             }
         }
 

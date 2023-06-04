@@ -18,6 +18,10 @@
 
         public ProtagonistOf Comics { get; set; }
 
+        public int NumberOfComics { get; set; }
+
         public ProtagonistOf Series { get; set; }
+
+        public int NumberOfSeries { get; set;}
     }
 }
