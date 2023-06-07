@@ -1,6 +1,6 @@
 ﻿using MVP.PrismMaui.Infrastructure.Abstractions;
 using MVP.PrismMaui.Infrastructure.Mappers;
-using MVP.PrismMaui.Infrastructure.Services.Heroes;
+using MVP.PrismMaui.Infrastructure.Services.Heroes.Models;
 using MVP.PrismMaui.Models.Heroes;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

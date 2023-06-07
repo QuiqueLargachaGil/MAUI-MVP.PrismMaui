@@ -1,5 +1,6 @@
 ﻿using MVP.PrismMaui.Infrastructure.Abstractions;
 using MVP.PrismMaui.Infrastructure.Services.Base;
+using MVP.PrismMaui.Infrastructure.Services.Heroes.Models;
 using MVP.PrismMaui.Services.Abstractions;
 
 namespace MVP.PrismMaui.Infrastructure.Services.Heroes
@@ -15,10 +16,14 @@ namespace MVP.PrismMaui.Infrastructure.Services.Heroes
 
         public async Task<HeroesResponse> GetHeroes(HeroesRequest request)
         {
-            var endpoint = $"{string.Format(HeroesEndpoint,"YourApiKey", "YourHash")}";//?{request.ToQueryString()}";
-
+            var endpoint = $"{string.Format(HeroesEndpoint, "YourApiKey", "YourHash")}";//?{request.ToQueryString()}";
             return await HttpCall<HeroesResponse, HeroesRequest>(HttpMethod.Get, endpoint, request);//.ConfigureAwait(false);            
         }
 
+        public async Task<ComicsResponse> GetComicsByHero(ComicsRequest request)
+        {
+            var endpoint = $"{request.AbsolutePath}?ts=1&apikey=YourApiKey&hash=YourHash";
+            return await HttpCall<ComicsResponse, ComicsRequest>(HttpMethod.Get, endpoint, request);
+        }
     }
 }

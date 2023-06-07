@@ -53,7 +53,7 @@ namespace MVP.PrismMaui.Infrastructure.Mappers
             return photoSource;
         }
 
-        private static ProtagonistOf GetComics(ComicDto comicDto)
+        private static ProtagonistOf GetComics(ComicInfoDto comicDto)
         {
             var protagonistOf = new ProtagonistOf
             {

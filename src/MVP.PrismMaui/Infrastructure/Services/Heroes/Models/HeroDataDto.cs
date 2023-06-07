@@ -2,7 +2,7 @@
 
 namespace MVP.PrismMaui.Infrastructure.Services.Heroes.Models
 {
-    public class DataDto
+    public class HeroDataDto
     {
         [JsonProperty("offset")]
         public int Offset { get; set; }

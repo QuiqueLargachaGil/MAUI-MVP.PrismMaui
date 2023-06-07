@@ -23,7 +23,7 @@ namespace MVP.PrismMaui.Infrastructure.Services.Heroes.Models
         public string ResourceUri { get; set; }
 
         [JsonProperty("comics")]
-        public ComicDto Comics { get; set; }
+        public ComicInfoDto Comics { get; set; }
 
         [JsonProperty("series")]
         public SerieDto Series { get; set; }
