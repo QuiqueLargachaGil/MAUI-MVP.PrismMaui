@@ -1,4 +1,5 @@
 ﻿using MVP.PrismMaui.Infrastructure.Services.Heroes;
+using MVP.PrismMaui.Infrastructure.Services.Heroes.Models;
 using MVP.PrismMaui.Models.Heroes;
 
 namespace MVP.PrismMaui.Infrastructure.Mappers
@@ -25,6 +26,24 @@ namespace MVP.PrismMaui.Infrastructure.Mappers
             }
 
             return heroList;
+        }
+
+        public static IEnumerable<ComicCover> GetComicsCover(ComicsResponse data)
+        {
+            if (data is null)
+            {
+                return Enumerable.Empty<ComicCover>();
+            }
+
+            var mapper = new ComicCoverMapper();
+
+            var comicCoverList = new List<ComicCover>();
+            foreach (var cover in data.Data.Comics)
+            {
+                comicCoverList.Add(mapper.Map(cover));
+            }
+
+            return comicCoverList;
         }
     }
 }
