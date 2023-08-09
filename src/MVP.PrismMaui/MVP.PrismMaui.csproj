@@ -12,10 +12,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>MVP.PrismMaui</ApplicationTitle>
+		<ApplicationTitle>MarvelApp</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mvp.prismmaui</ApplicationId>
+		<ApplicationId>com.studyingtechnology.marvelapp</ApplicationId>
 		<ApplicationIdGuid>098a5aa6-5b98-4353-a853-c3b4073d5af9</ApplicationIdGuid>
 
 		<!-- Versions -->

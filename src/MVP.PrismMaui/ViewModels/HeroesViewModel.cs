@@ -2,16 +2,15 @@
 using MVP.PrismMaui.Infrastructure.Mappers;
 using MVP.PrismMaui.Infrastructure.Services.Heroes.Models;
 using MVP.PrismMaui.Models.Heroes;
+using MVP.PrismMaui.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MVP.PrismMaui.ViewModels
 {
-	public class HeroesViewModel : BindableBase, INavigatedAware
+	public class HeroesViewModel : BaseViewModel
 	{
         private readonly INavigationService _navigationService;
-        private readonly IPageDialogService _dialogService;
-        private readonly IDialogService _dialog;
 
         private readonly IHeroesService _heroesService;
 
@@ -19,11 +18,9 @@ namespace MVP.PrismMaui.ViewModels
         private IEnumerable<Hero> _heroesList;
         private bool _isRefreshing;
 
-        public HeroesViewModel(INavigationService navigationService, IPageDialogService dialogService, IDialogService dialog, IHeroesService heroesService)
+        public HeroesViewModel(INavigationService navigationService, IHeroesService heroesService, IPageDialogService dialogService, IDialogService dialogs) : base(dialogService, dialogs)
         {
             _navigationService = navigationService;
-            _dialogService = dialogService;
-            _dialog = dialog;
 
             _heroesService = heroesService;
 
@@ -32,13 +29,9 @@ namespace MVP.PrismMaui.ViewModels
             NavigateToHeroDetailsCommand = new Command<Hero>(async (selectedHero) => await NavigateToHeroDetails(selectedHero));
         }
 
-		public void OnNavigatedFrom(INavigationParameters parameters)
+		public override async Task OnNavigatedImplementation(INavigationParameters parameters)
 		{
-			
-		}
-
-		public async void OnNavigatedTo(INavigationParameters parameters)
-		{
+            await base.OnNavigatedImplementation(parameters);
 			await LoadData();
 		}
 
@@ -70,11 +63,7 @@ namespace MVP.PrismMaui.ViewModels
             }
             catch (Exception exception)
             {
-				//HandleException(exception);
-				await _dialogService.DisplayAlertAsync("MarvelApp", exception.Message, "Ok");
-                
-                // Tal y como se indica en la documentación de Prism, la interface IDialogService, aún no está disponible para MAUI
-                //_dialog.ShowDialog("PRUEBA");
+				await HandleExceptions(exception);                
             }
         }
 
@@ -94,9 +83,9 @@ namespace MVP.PrismMaui.ViewModels
 
         private async Task Refresh()
         {
-            IsRefreshing = true;
+            IsBusy = true;
             await LoadData();
-            IsRefreshing = false;
+            IsBusy = false;
         }
 
         private async Task NavigateToHeroDetails(Hero selectedHero)

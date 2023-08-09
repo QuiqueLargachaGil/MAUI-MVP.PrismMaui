@@ -23,7 +23,7 @@
         <RefreshView
             Grid.Row="1"
             Command="{Binding RefreshCommand}"
-            IsRefreshing="{Binding IsRefreshing}"
+            IsRefreshing="{Binding IsBusy}"
             Margin="0,20,0,0">
             <CollectionView
                 ItemsSource="{Binding Heroes}"
