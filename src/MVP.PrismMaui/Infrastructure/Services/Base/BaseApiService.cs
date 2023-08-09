@@ -37,7 +37,7 @@ namespace MVP.PrismMaui.Infrastructure.Services.Base
                         response = await client.GetAsync(url);//.ConfigureAwait(false);
                         break;
                     default:
-                        throw new ArgumentException($"{nameof(httpMethod)} should be HttpMethod.Get or HttpMethod.Post");
+                        throw new ArgumentException($"{nameof(httpMethod)} should be HttpMethod.Get");
                 }
 
                 if (!response.IsSuccessStatusCode)

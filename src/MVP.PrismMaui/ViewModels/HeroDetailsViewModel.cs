@@ -7,30 +7,45 @@ using System.Windows.Input;
 
 namespace MVP.PrismMaui.ViewModels
 {
-    public class HeroDetailsViewModel : BindableBase, IInitializeAsync
+	public class HeroDetailsViewModel : BindableBase, INavigatedAware
     {
         private readonly INavigationService _navigationService;
+        private readonly IPageDialogService _dialogService;
+
         private readonly IHeroesService _heroesService;
 
+        private string _title;
         private Hero _hero;
         private ObservableCollection<ComicCover> _comics;
 
-        public HeroDetailsViewModel(INavigationService navigationService, IHeroesService heroesService)
+        public HeroDetailsViewModel(INavigationService navigationService, IPageDialogService dialogService, IHeroesService heroesService)
         {
             _navigationService = navigationService;
+            _dialogService = dialogService;
+
             _heroesService = heroesService;
 
             BackCommand = new Command(async () => await Back());
         }
 
-        public async Task InitializeAsync(INavigationParameters parameters)
-        {
-            var hero = parameters.GetValue<Hero>("SelectedHero");
+		public void OnNavigatedFrom(INavigationParameters parameters)
+		{
+			
+		}
 
-            await LoadData(hero);
-        }
+		public async void OnNavigatedTo(INavigationParameters parameters)
+		{
+			var hero = parameters.GetValue<Hero>("SelectedHero");
+			await LoadData(hero);
+		}
 
         public ICommand BackCommand { get; }
+
+        public string Title
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);
+        }
 
         public Hero Hero
         {
@@ -46,12 +61,21 @@ namespace MVP.PrismMaui.ViewModels
 
         private async Task LoadData(Hero hero)
         {
-            var request = new ComicsRequest(GetBaseUrl(hero.Comics.CollectionURI), GetPath(hero.Comics.CollectionURI));
-            var response = await _heroesService.GetComicsByHero(request);
-            var comics = BackendToModelMapper.GetComicsCover(response);
+            try
+            {
+                Title = hero.Name;
+                Hero = hero;
 
-            Hero = hero;
-            Comics = new ObservableCollection<ComicCover>(comics);
+                var request = new ComicsRequest(GetBaseUrl(hero.Comics.CollectionURI), GetPath(hero.Comics.CollectionURI));
+                var response = await _heroesService.GetComicsByHero(request);
+                var comics = BackendToModelMapper.GetComicsCover(response);
+
+                Comics = new ObservableCollection<ComicCover>(comics);
+            }
+            catch (Exception exception)
+            {
+                await _dialogService.DisplayAlertAsync("MarvelApp", exception.Message, "Ok");
+            }
         }
 
         private string GetBaseUrl(string uri)
@@ -72,5 +96,5 @@ namespace MVP.PrismMaui.ViewModels
         {
             await _navigationService.GoBackAsync();
         }
-    }    
+	}    
 }

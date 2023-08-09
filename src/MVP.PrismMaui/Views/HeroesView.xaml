@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="MVP.PrismMaui.Views.HeroesView"
     Title="Heroes"
-    xmlns:prism="http://prismlibrary.com">
+    xmlns:prism="http://prismlibrary.com"
+    x:Name="_heroesPage">
 
     <Grid
         RowDefinitions="auto, *"
@@ -26,14 +27,17 @@
             Margin="0,20,0,0">
             <CollectionView
                 ItemsSource="{Binding Heroes}"
-                SelectionChangedCommand="{Binding NavigateToHeroDetailsCommand}"
-                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid
                             RowDefinitions="auto, auto"
                             ColumnDefinitions="auto, *">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Path=BindingContext.NavigateToHeroDetailsCommand, Source={x:Reference _heroesPage}}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
                             <Image
                                 Grid.Row="0"
                                 Grid.Column="0"
