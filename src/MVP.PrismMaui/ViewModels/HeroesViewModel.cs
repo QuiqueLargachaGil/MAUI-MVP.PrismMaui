@@ -7,28 +7,42 @@ using System.Windows.Input;
 
 namespace MVP.PrismMaui.ViewModels
 {
-    public class HeroesViewModel : BindableBase
-    {
+	public class HeroesViewModel : BindableBase, INavigatedAware
+	{
         private readonly INavigationService _navigationService;
+        private readonly IPageDialogService _dialogService;
+        private readonly IDialogService _dialog;
+
         private readonly IHeroesService _heroesService;
 
         private ObservableCollection<Hero> _heroes;
         private IEnumerable<Hero> _heroesList;
         private bool _isRefreshing;
 
-        public HeroesViewModel(INavigationService navigationService, IHeroesService heroesService)
+        public HeroesViewModel(INavigationService navigationService, IPageDialogService dialogService, IDialogService dialog, IHeroesService heroesService)
         {
             _navigationService = navigationService;
+            _dialogService = dialogService;
+            _dialog = dialog;
+
             _heroesService = heroesService;
 
             SearchHeroCommand = new Command<string>((textToSearch) => SearchHero(textToSearch));
             RefreshCommand = new Command(async () => await Refresh());
             NavigateToHeroDetailsCommand = new Command<Hero>(async (selectedHero) => await NavigateToHeroDetails(selectedHero));
-            
-            LoadData();
         }
 
-        public ICommand SearchHeroCommand { get; }
+		public void OnNavigatedFrom(INavigationParameters parameters)
+		{
+			
+		}
+
+		public async void OnNavigatedTo(INavigationParameters parameters)
+		{
+			await LoadData();
+		}
+
+		public ICommand SearchHeroCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand NavigateToHeroDetailsCommand { get; }
 
@@ -56,8 +70,11 @@ namespace MVP.PrismMaui.ViewModels
             }
             catch (Exception exception)
             {
-                //HandleException(exception);
-                await Application.Current.MainPage.DisplayAlert("MarvelApp", exception.Message, "Ok");
+				//HandleException(exception);
+				await _dialogService.DisplayAlertAsync("MarvelApp", exception.Message, "Ok");
+                
+                // Tal y como se indica en la documentación de Prism, la interface IDialogService, aún no está disponible para MAUI
+                //_dialog.ShowDialog("PRUEBA");
             }
         }
 
@@ -84,12 +101,12 @@ namespace MVP.PrismMaui.ViewModels
 
         private async Task NavigateToHeroDetails(Hero selectedHero)
         {
-            var parameters = new NavigationParameters
-            {
-                { "SelectedHero", selectedHero }
-            };
+			var parameters = new NavigationParameters
+			{
+				{ "SelectedHero", selectedHero }
+			};
 
-            await _navigationService.NavigateAsync("HeroDetailsView", parameters);
+			await _navigationService.NavigateAsync("HeroDetailsView", parameters);
         }
-    }
+	}
 }
