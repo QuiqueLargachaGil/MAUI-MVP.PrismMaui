@@ -2,50 +2,39 @@
 using MVP.PrismMaui.Infrastructure.Mappers;
 using MVP.PrismMaui.Infrastructure.Services.Heroes.Models;
 using MVP.PrismMaui.Models.Heroes;
+using MVP.PrismMaui.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MVP.PrismMaui.ViewModels
 {
-	public class HeroDetailsViewModel : BindableBase, INavigatedAware
+	public class HeroDetailsViewModel : BaseViewModel
     {
         private readonly INavigationService _navigationService;
-        private readonly IPageDialogService _dialogService;
 
         private readonly IHeroesService _heroesService;
 
-        private string _title;
         private Hero _hero;
         private ObservableCollection<ComicCover> _comics;
 
-        public HeroDetailsViewModel(INavigationService navigationService, IPageDialogService dialogService, IHeroesService heroesService)
+        public HeroDetailsViewModel(INavigationService navigationService, IHeroesService heroesService, IPageDialogService dialogService, IDialogService dialogs) : base(dialogService, dialogs)
         {
             _navigationService = navigationService;
-            _dialogService = dialogService;
 
             _heroesService = heroesService;
 
             BackCommand = new Command(async () => await Back());
         }
 
-		public void OnNavigatedFrom(INavigationParameters parameters)
+		public override async Task OnNavigatedImplementation(INavigationParameters parameters)
 		{
-			
-		}
+			await base.OnNavigatedImplementation(parameters);
 
-		public async void OnNavigatedTo(INavigationParameters parameters)
-		{
 			var hero = parameters.GetValue<Hero>("SelectedHero");
 			await LoadData(hero);
 		}
 
         public ICommand BackCommand { get; }
-
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
 
         public Hero Hero
         {
@@ -74,7 +63,7 @@ namespace MVP.PrismMaui.ViewModels
             }
             catch (Exception exception)
             {
-                await _dialogService.DisplayAlertAsync("MarvelApp", exception.Message, "Ok");
+                await HandleExceptions(exception);
             }
         }
 
